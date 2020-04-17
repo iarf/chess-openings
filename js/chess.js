@@ -42,5 +42,4 @@ const drawBoard = (c, fen) => {
 	}
 
 
-
 }
