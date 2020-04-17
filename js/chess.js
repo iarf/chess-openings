@@ -1,6 +1,6 @@
 window.onload = () => {
 	const c = document.getElementById('chessboard');
-	drawBoard(c,'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+	drawBoard(c,'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2')
 }
 
 const drawBoard = (c, fen) => {
@@ -29,15 +29,18 @@ const drawBoard = (c, fen) => {
 	
 	//draw board
 	let white = true; //color of top left square
+	let count = 0
 	for (let i = 0; i < 8; i++){
 		for (let j = 0; j < 8; j++){
 			white ? ctx.fillStyle = '#ded3bd' : ctx.fillStyle  = '#a17b4d';
 
-			ctx.fillRect( i*(dim/8), j*(dim/8), dim/8, dim/8);
+			ctx.fillRect( j*(dim/8), i*(dim/8), dim/8, dim/8);
+			
 			if (pieceArray[i][j] != 'e'){
-			ctx.drawImage(drawPiece(pieceArray[i][j],pieces),i*(dim/8),j*(dim/8),dim/8,dim/8)
+				ctx.drawImage(drawPiece(pieceArray[i][j],pieces),j*(dim/8),i*(dim/8),dim/8,dim/8)
 			}
 
+			count++
 			white = !white;
 		}
 		white = !white;
