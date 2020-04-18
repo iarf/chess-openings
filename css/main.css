@@ -1,0 +1,14 @@
+body {
+  background: #f5f5f5;
+}
+
+.board-column {
+  text-align: center;
+}
+
+.games-list {
+  background: #d1c8e0;
+  min-height: 100px;
+}
+
+/*# sourceMappingURL=main.css.map */

@@ -1,16 +1,17 @@
+let c;
+let pieceArray;
 window.onload = () => {
-	const c = document.getElementById('chessboard');
-	drawBoard(c,'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2')
+	c = document.getElementById('chessboard');
+	pieceArray = getPieceArray('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2')
+	drawBoard(c);
+	c.addEventListener('click',movePiece);
 }
 
-const drawBoard = (c, fen) => {
-	const ctx = c.getContext('2d');
-	const dim = c.width; //dimensions
-
+const getPieceArray = (fen) => {
 	//convert FEN input to an array
 	const splitFen = fen.split(' ');
 	const fenPos = splitFen[0].split('/');
-	let pieceArray = new Array(8);
+	const pieceArray = new Array(8);
 	for (let i = 0; i < 8; i++){
 		pieceArray[i] = new Array();
 	}
@@ -26,13 +27,21 @@ const drawBoard = (c, fen) => {
 			}
 		}
 	}
+	return pieceArray;
+}
+
+const drawBoard = (c) => {
+	const ctx = c.getContext('2d');
+	const dim = c.width; //dimensions
+
+
 	
 	//draw board
 	let white = true; //color of top left square
 	let count = 0
 	for (let i = 0; i < 8; i++){
 		for (let j = 0; j < 8; j++){
-			white ? ctx.fillStyle = '#ded3bd' : ctx.fillStyle  = '#a17b4d';
+			white ? ctx.fillStyle = '#f5d6ba' : ctx.fillStyle  = '#d19966';
 
 			ctx.fillRect( j*(dim/8), i*(dim/8), dim/8, dim/8);
 			
@@ -78,6 +87,13 @@ const drawPiece = (val,set) => {
 		default:
 			return null;
 	}
+}
+
+const movePiece = (e) => {
+	const rect = c.getBoundingClientRect();
+	let x = e.clientX - rect.left;
+	let y = e.clientY - rect.top;
+
 }
 
 const PieceSet = class {
