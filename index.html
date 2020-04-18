@@ -16,10 +16,27 @@
 			<div class="col-12 col-md-8 board-column">
 				<canvas id="chessboard" width="500" height="542"></canvas>
 				<div class="settings">
-					<select name="color">
-						<option value="white">White to move</option>
-						<option value="black">Black to move</option>
+					<select id="color">
+						<option value="w">White to move</option>
+						<option value="b">Black to move</option>
 					</select>
+					<div id="castling">
+						<p>Castling Ability</p>
+						<input type="checkbox" name="Q">
+						<label for="Q">White queenside</label>
+						<input type="checkbox" name="K">
+						<label for="K">White kingside</label>
+						<input type="checkbox" name="q">
+						<label for="q">Black queenside</label>
+						<input type="checkbox" name="k">
+						<label for="k">Black kingside</label>
+					</div>
+					<label for="passant">En passant target square (if applicable)</label>
+					<input type="text" name="passant">
+					<label for="halfMove">Half-move count (for 50-move draw rule)</label>
+					<input type="number" name="halfMove">
+					<label for="fullMove">Move count</label>
+					<input type="number" name="fullMove">
 				</div>
 			</div>
 		</div>

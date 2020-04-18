@@ -116,7 +116,7 @@ const getPieceArray = (fen) => {
 
 const makeFen = () => {
 	//make board position
-	boardPosFen = '';
+	placementFen = '';
 
 	for (let i = 0; i < 8; i++){
 		let str = ''
@@ -134,9 +134,50 @@ const makeFen = () => {
 				str += pieceArray[i][j]
 			}
 		}
-		boardPosFen += str + '/';
+		placementFen += str + '/';
 	}
-	console.log(boardPosFen)
+	placementFen  = placementFen.slice(0,-1);// remove the exterior '/'
+
+	//get side to move
+	let sideSelect = document.getElementById('color');
+	let sideFen = sideSelect.options[sideSelect.selectedIndex].value;
+
+	//get castling ability
+	let castleFen = '';
+	const castleSel = document.getElementById('castling');
+	const wQ = castleSel.querySelector('input[name="Q"]');
+	const wK = castleSel.querySelector('input[name="K"]');
+	const bQ = castleSel.querySelector('input[name="q"]');
+	const bK = castleSel.querySelector('input[name="k"]');
+	if (wK.checked){
+		castleFen += 'K';
+	}
+	if (wQ.checked){
+		castleFen += 'Q';
+	}
+	if (bK.checked){
+		castleFen += 'k';
+	}
+	if (bQ.checked){
+		castleFen += 'q';
+	}
+	if (!(wK.checked || wQ.checked || bK.checked || bQ.checked)){
+		castleFen = '-'
+	}
+
+	//get en passant ability
+	let passantFen = '-'
+	const passantEl = document.querySelector('input[name="passant"]');
+	if (passantEl.value.length == 2){
+		passantFen = passantEl.value.toLowerCase();
+	}
+
+	const halfFen = document.querySelector('input[name="halfMove"]').value;
+	const moveFen = document.querySelector('input[name="fullMove"]').value;
+
+	const fen = `${placementFen} ${sideFen} ${castleFen} ${passantFen} ${halfFen} ${moveFen}`;
+	
+	return fen;
 }
 
 const drawBoard = (c) => {
