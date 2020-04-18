@@ -1,10 +1,94 @@
 let c;
 let pieceArray;
+let selectedPiece = {};
+let mousePos = {};
+let dragging = false;
+let newPiece;
 window.onload = () => {
 	c = document.getElementById('chessboard');
 	pieceArray = getPieceArray('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2')
 	drawBoard(c);
-	c.addEventListener('click',movePiece);
+
+	c.addEventListener('mousedown', () => {
+		// dragging = true;
+		if (mousePos.y < c.width){
+			selectedPiece.x = Math.floor(mousePos.x / (c.width / 8));
+			selectedPiece.y = Math.floor(mousePos.y / (c.width / 8));
+			selectedPiece.piece = pieceArray[selectedPiece.y][selectedPiece.x];
+		}else{// clicking on drawer
+			newPiece = true;
+			const drawerPos = Math.floor(mousePos.x / (c.width/12));
+			switch(drawerPos){
+				case 0: 
+					selectedPiece.piece = 'K';
+					break;
+				case 1:
+					selectedPiece.piece = 'Q';
+					break;
+				case 2:
+					selectedPiece.piece = 'R';
+					break;
+				case 3:
+					selectedPiece.piece = 'B';
+					break;
+				case 4:
+					selectedPiece.piece = 'N';
+					break;
+				case 5:
+					selectedPiece.piece = 'P';
+					break;
+				case 6:
+					selectedPiece.piece = 'k';
+					break;
+				case 7:
+					selectedPiece.piece = 'q';
+					break;
+				case 8:
+					selectedPiece.piece = 'r';
+					break;
+				case 9: 
+					selectedPiece.piece = 'b';
+					break;
+				case 10:
+					selectedPiece.piece = 'n';
+					break;
+				case 11:
+					selectedPiece.piece = 'p';
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (selectedPiece.piece != 'e'){
+			dragging = true;
+		}
+	});
+	c.addEventListener('mousemove',(e) => {
+		const rect = c.getBoundingClientRect();
+		mousePos.x = e.clientX - rect.left;
+		mousePos.y = e.clientY - rect.top;
+		if (dragging){
+			drawBoard(c);
+		}
+	});
+	c.addEventListener('mouseup', () => {
+		if (dragging){
+			dragging = false;
+
+			if (!newPiece){
+				pieceArray[selectedPiece.y][selectedPiece.x] = 'e';
+			}
+			newPiece = false;
+			if (mousePos.y < c.width){
+				selectedPiece.x = Math.floor(mousePos.x / (c.width / 8));
+				selectedPiece.y = Math.floor(mousePos.y / (c.width / 8));
+				pieceArray[selectedPiece.y][selectedPiece.x] = selectedPiece.piece;
+			}
+			drawBoard(c);
+
+		}
+	})
 }
 
 const getPieceArray = (fen) => {
@@ -30,6 +114,31 @@ const getPieceArray = (fen) => {
 	return pieceArray;
 }
 
+const makeFen = () => {
+	//make board position
+	boardPosFen = '';
+
+	for (let i = 0; i < 8; i++){
+		let str = ''
+		let count = 0;
+		for (let j = 0; j < 8; j++){
+			if (pieceArray[i][j] == 'e'){
+				count ++;
+				if (j == 7){
+					str += count;
+				}
+			}else if (count > 0){
+				str += count + pieceArray[i][j];
+				count = 0;
+			}else{
+				str += pieceArray[i][j]
+			}
+		}
+		boardPosFen += str + '/';
+	}
+	console.log(boardPosFen)
+}
+
 const drawBoard = (c) => {
 	const ctx = c.getContext('2d');
 	const dim = c.width; //dimensions
@@ -42,18 +151,35 @@ const drawBoard = (c) => {
 	for (let i = 0; i < 8; i++){
 		for (let j = 0; j < 8; j++){
 			white ? ctx.fillStyle = '#f5d6ba' : ctx.fillStyle  = '#d19966';
-
 			ctx.fillRect( j*(dim/8), i*(dim/8), dim/8, dim/8);
 			
 			if (pieceArray[i][j] != 'e'){
 				ctx.drawImage(drawPiece(pieceArray[i][j],pieces),j*(dim/8),i*(dim/8),dim/8,dim/8)
 			}
-
+			if (dragging){
+				ctx.drawImage(drawPiece(selectedPiece.piece,pieces),mousePos.x-32,mousePos.y-32,dim/8,dim/8);
+			}
 			count++
 			white = !white;
 		}
 		white = !white;
 	}
+	//draw drawer
+	ctx.fillStyle = '#c9bfdb';
+	ctx.fillRect(0,dim,dim,dim/12)
+	ctx.drawImage(drawPiece('K',pieces),(0*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('Q',pieces),(1*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('R',pieces),(2*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('B',pieces),(3*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('N',pieces),(4*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('P',pieces),(5*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('k',pieces),(6*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('q',pieces),(7*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('r',pieces),(8*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('b',pieces),(9*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('n',pieces),(10*(dim/12)),dim,dim/12,dim/12);
+	ctx.drawImage(drawPiece('p',pieces),(11*(dim/12)),dim,dim/12,dim/12);
+
 
 
 }
@@ -89,12 +215,6 @@ const drawPiece = (val,set) => {
 	}
 }
 
-const movePiece = (e) => {
-	const rect = c.getBoundingClientRect();
-	let x = e.clientX - rect.left;
-	let y = e.clientY - rect.top;
-
-}
 
 const PieceSet = class {
 	constructor(source){
