@@ -65,6 +65,7 @@ window.onload = () => {
 			dragging = true;
 		}
 	});
+	
 	c.addEventListener('mousemove',(e) => {
 		const rect = c.getBoundingClientRect();
 		mousePos.x = 2*(e.clientX - rect.left);
@@ -75,6 +76,7 @@ window.onload = () => {
 			drawBoard(c);
 		}
 	});
+
 	c.addEventListener('mouseup', () => {
 		if (dragging){
 			dragging = false;
