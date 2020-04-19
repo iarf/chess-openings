@@ -270,18 +270,26 @@ const getGames = async() => {
 	const ret = await res.json();
 	await console.log(ret);
 	const moveDiv = document.getElementById('next-moves');
-	listHtml = '<div class="col-2">Move</div><div class="col-3">Times played</div><div class="col-2">Avg. rating</div><div class="col-5">Outcomes (white/draw/black)</div>';
+	movesHtml = '<div class="col-2">Move</div><div class="col-3">Times played</div><div class="col-2">Avg. rating</div><div class="col-5">Outcomes (white/draw/black)</div>';
 	for (let i = 0; i < ret.moves.length; i++){
+		let bg;
+		if (i % 2 == 0){
+			bg = '#f1e9f2'
+		}else{
+			bg = 'auto'
+		}
 		move = ret.moves[i];
 		listHtml += `
-		<div class="col-2">${i + 1}. ${move.san}</div>
-		<div class="col-3">${(move.white + move.black + move.draws).toLocaleString()}</div>
-		<div class="col-2">${move.averageRating.toLocaleString()}</div>
-		<div class="col-5">${move.white.toLocaleString()} / ${move.draws.toLocaleString()} / ${move.black.toLocaleString()}</div>
+		<div class="col-2 move" style="background:${bg};">${i + 1}. <strong>${move.san}</strong></div>
+		<div class="col-3" style="background:${bg};">${(move.white + move.black + move.draws).toLocaleString()}</div>
+		<div class="col-2" style="background:${bg};">${move.averageRating.toLocaleString()}</div>
+		<div class="col-5" style="background:${bg};">${move.white.toLocaleString()} / ${move.draws.toLocaleString()} / ${move.black.toLocaleString()}</div>
 		`
 	}
-	// for (let i = 0; i < ret.)
-	moveDiv.innerHTML = await listHtml;
+	for (let i = 0; i < ret.topGames.length; i++){
+
+	}
+	moveDiv.innerHTML = await movesHtml;
 }
 
 

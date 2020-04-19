@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.0.min.js"
+		integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 	<script src="js/chess.js"></script>
 	<link rel="stylesheet" href="css/main.css">
@@ -10,42 +13,52 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 </head>
+
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-12 col-lg-6 board-column">
-				<div >
-				<canvas id="chessboard" width="400" height="433"></canvas>
-				<div class="settings">
-					<select id="color">
-						<option value="w">White to move</option>
-						<option value="b">Black to move</option>
-					</select>
-					<div id="castling">
-						<p>Castling Ability</p>
-						<input type="checkbox" name="Q" checked>
-						<label for="Q">White queenside</label>
-						<input type="checkbox" name="K" checked>
-						<label for="K">White kingside</label>
-						<input type="checkbox" name="q" checked>
-						<label for="q">Black queenside</label>
-						<input type="checkbox" name="k" checked>
-						<label for="k">Black kingside</label>
-					</div>
-					<label for="passant">En passant target square (if applicable)</label>
-					<input type="text" name="passant" maxlength="2"><br>
-					<label for="halfMove">Half-move count (for 50-move draw rule)</label>
+			<div class="col-12 col-lg-6 board-wrap">
+				<div class="board-column">
+					<canvas id="chessboard" width="400" height="433"></canvas>
+					<div class="settings" class="form">
+						<select id="color">
+							<option value="w">White to move</option>
+							<option value="b">Black to move</option>
+						</select>
+						<div id="castling">
+							<p>Castling Ability</p>
+							<input type="checkbox" name="Q" checked>
+							<label for="Q">White queenside</label>
+							<input type="checkbox" name="K" checked>
+							<label for="K">White kingside</label>
+							<input type="checkbox" name="q" checked>
+							<label for="q">Black queenside</label>
+							<input type="checkbox" name="k" checked>
+							<label for="k">Black kingside</label>
+						</div>
+						<label for="passant">En passant target square (if applicable)</label>
+						<input type="text" name="passant" maxlength="2"><br>
+						<label for="halfMove">Half-move count (for 50-move draw rule)</label>
 					<input type="number" name="halfMove"><br>
 					<label for="fullMove">Move count</label>
 					<input type="number" name="fullMove">
+					</div>
 				</div>
 			</div>
-			</div>
 			<div class="col-12 col-lg-6 info-column">
-				<h2>Moves from here:</h2>
-				<div class="row" id="next-moves"><!--common next moves--></div>
+				<div class="board-column">
+					<h2>Moves from here:</h2>
+					<div class="row" id="next-moves">
+						<!--common next moves-->
+					</div>
+					<h2>Highest rated games:</h2>
+					<div class="row" id="highest-games">
+						<!-- highest rated games from here -->
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </body>
+
 </html>
