@@ -97,6 +97,8 @@ window.onload = () => {
 
 		}
 	});
+	sel = document.getElementById('color');
+	sel.addEventListener('click',getGames);
 	
 }
 
@@ -175,16 +177,13 @@ const makeFen = () => {
 	}
 
 	//get en passant ability
-	let passantFen = '-'
-	const passantEl = document.querySelector('input[name="passant"]');
-	if (passantEl.value.length == 2){
-		passantFen = passantEl.value.toLowerCase();
-	}
+	// let passantFen = '-'
+	// const passantEl = document.querySelector('input[name="passant"]');
+	// if (passantEl.value.length == 2){
+	// 	passantFen = passantEl.value.toLowerCase();
+	// }
 
-	const halfFen = document.querySelector('input[name="halfMove"]').value;
-	const moveFen = document.querySelector('input[name="fullMove"]').value;
-
-	const fen = `${placementFen} ${sideFen} ${castleFen} ${passantFen} ${halfFen} ${moveFen}`;
+	const fen = `${placementFen} ${sideFen} ${castleFen}`;
 	
 	return fen;
 }
@@ -270,7 +269,8 @@ const getGames = async() => {
 	const ret = await res.json();
 	await console.log(ret);
 	const moveDiv = document.getElementById('next-moves');
-	movesHtml = '<div class="col-2">Move</div><div class="col-3">Times played</div><div class="col-2">Avg. rating</div><div class="col-5">Outcomes (white/draw/black)</div>';
+	const gameDiv = document.getElementById('highest-games');
+	let movesHtml = '<div class="col-2">Move</div><div class="col-3">Times played</div><div class="col-2">Avg. rating</div><div class="col-5">Outcomes (white/draw/black)</div>';
 	for (let i = 0; i < ret.moves.length; i++){
 		let bg;
 		if (i % 2 == 0){
@@ -279,17 +279,31 @@ const getGames = async() => {
 			bg = 'auto'
 		}
 		move = ret.moves[i];
-		listHtml += `
+		movesHtml += `
 		<div class="col-2 move" style="background:${bg};">${i + 1}. <strong>${move.san}</strong></div>
 		<div class="col-3" style="background:${bg};">${(move.white + move.black + move.draws).toLocaleString()}</div>
 		<div class="col-2" style="background:${bg};">${move.averageRating.toLocaleString()}</div>
 		<div class="col-5" style="background:${bg};">${move.white.toLocaleString()} / ${move.draws.toLocaleString()} / ${move.black.toLocaleString()}</div>
 		`
 	}
-	for (let i = 0; i < ret.topGames.length; i++){
 
+	let gamesHtml = '<div class="col-2">Year</div><div class="col-7">Players</div><div class="col-3">Outcome</div>'
+	for (let i = 0; i < ret.topGames.length; i++){
+		game = ret.topGames[i];
+		let bg;
+		if (i % 2 == 0){
+			bg = '#f1e9f2'
+		}else{
+			bg = 'auto'
+		}
+		gamesHtml += `
+		<div class="col-2" style="background:${bg};">${game.year}</div>
+		<div class="col-7" style="background:${bg};">${game.white.name} (${game.white.rating}) v. ${game.black.name} (${game.black.rating}) </div>
+		<div class="col-3" style="background:${bg};">${game.winner}</div>
+		`
 	}
 	moveDiv.innerHTML = await movesHtml;
+	gameDiv.innerHTML = await gamesHtml;
 }
 
 
