@@ -67,8 +67,10 @@ window.onload = () => {
 	});
 	c.addEventListener('mousemove',(e) => {
 		const rect = c.getBoundingClientRect();
-		mousePos.x = e.clientX - rect.left;
-		mousePos.y = e.clientY - rect.top;
+		mousePos.x = 2*(e.clientX - rect.left);
+		mousePos.y = 2*(e.clientY - rect.top);
+
+		console.log(`${mousePos.x},${mousePos.y}`);
 		if (dragging){
 			drawBoard(c);
 		}
