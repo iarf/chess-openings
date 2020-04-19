@@ -6,8 +6,9 @@ let dragging = false;
 let newPiece;
 window.onload = () => {
 	c = document.getElementById('chessboard');
-	pieceArray = getPieceArray('rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2')
+	pieceArray = getPieceArray('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq')
 	drawBoard(c);
+	getGames();
 
 	c.addEventListener('mousedown', () => {
 		// dragging = true;
@@ -86,9 +87,17 @@ window.onload = () => {
 				pieceArray[selectedPiece.y][selectedPiece.x] = selectedPiece.piece;
 			}
 			drawBoard(c);
+			const sel = document.getElementById('color');
+			if (sel.value == 'b'){
+				sel.value = 'w';
+			}else{
+				sel.value = 'b';
+			}
+			getGames();
 
 		}
-	})
+	});
+	
 }
 
 const getPieceArray = (fen) => {
@@ -254,6 +263,25 @@ const drawPiece = (val,set) => {
 		default:
 			return null;
 	}
+}
+
+const getGames = async() => {
+	const res = await fetch(`https://explorer.lichess.ovh/master?fen=${makeFen()}`)
+	const ret = await res.json();
+	await console.log(ret);
+	const moveDiv = document.getElementById('next-moves');
+	listHtml = '<div class="col-2">Move</div><div class="col-3">Times played</div><div class="col-2">Avg. rating</div><div class="col-5">Outcomes (white/draw/black)</div>';
+	for (let i = 0; i < ret.moves.length; i++){
+		move = ret.moves[i];
+		listHtml += `
+		<div class="col-2">${i + 1}. ${move.san}</div>
+		<div class="col-3">${(move.white + move.black + move.draws).toLocaleString()}</div>
+		<div class="col-2">${move.averageRating.toLocaleString()}</div>
+		<div class="col-5">${move.white.toLocaleString()} / ${move.draws.toLocaleString()} / ${move.black.toLocaleString()}</div>
+		`
+	}
+	// for (let i = 0; i < ret.)
+	moveDiv.innerHTML = await listHtml;
 }
 
 
